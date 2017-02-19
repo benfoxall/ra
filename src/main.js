@@ -1,5 +1,6 @@
 import {Marker} from './lib/markers.js'
 import shuffles from 'knuth-shuffle'
+import MQT from 'mqt'
 
 const marker = new Marker()
 document.body.appendChild(marker.dom)
@@ -22,3 +23,12 @@ setInterval(() => {
   console.log(`display marker ${n}`)
   marker.update(n)
 }, 5000)
+
+
+const mqt = new MQT('test.mosquitto.org:8080')
+
+mqt.subscribe('/connections', (m) =>
+  console.log(`Connected: ${m}`)
+)
+
+mqt.publish('/connections', code.join(', '))
