@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>RA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style media="screen">
     body {margin:0}
 
@@ -34,9 +35,40 @@
       transform: scale(0.75) rotate(90deg) rotateX(90deg);
       background-color: #f08;
     }
+
+    #actions {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    button {
+      display: block;
+      font-size: 10vmin;
+      margin: auto 4vmin;
+      height: 30vmin;
+    }
+    button em {
+      display: block;
+      font-size: .6em;
+    }
+
+    canvas {width: 100vw}
     </style>
   </head>
   <body>
+    <div id="actions">
+
+      <button id="show">
+        Show AR code <em>(eg. laptop)</em>
+      </button>
+
+      <button id="capture">
+        Capture AR code <em>(eg. mobile)</em>
+      </button>
+
+    </div>
+
     <script src="main.js"></script>
   </body>
 </html>
