@@ -95,6 +95,10 @@ has-ansi@^2.0.0:
   dependencies:
     ansi-regex "^2.0.0"
 
+knuth-shuffle@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/knuth-shuffle/-/knuth-shuffle-1.0.1.tgz#454940ae816c14e1af6e6f09d8828818f95b5191"
+
 magic-string@^0.14.0:
   version "0.14.0"
   resolved "https://registry.yarnpkg.com/magic-string/-/magic-string-0.14.0.tgz#57224aef1701caeed273b17a39a956e72b172462"

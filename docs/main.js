@@ -21,7 +21,7 @@ var generate = function (i) { return [
 	]; };
 
 
-var createDom = function (document) {
+var createDom = function () {
   var root = document.createElement('div');
   root.className = 'marker';
 
@@ -49,13 +49,74 @@ var updateDom = function (element, n) {
 
 };
 
-var marker = createDom(document);
-document.body.appendChild(marker);
+
+var Marker = function Marker () {
+  this.dom = createDom(document);
+};
+
+Marker.prototype.update = function update (n) {
+  updateDom(this.dom, n);
+};
+
+var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
 
-updateDom(marker, 42);
 
 
+
+function createCommonjsModule(fn, module) {
+	return module = { exports: {} }, fn(module, module.exports), module.exports;
+}
+
+var index = createCommonjsModule(function (module, exports) {
+/*jshint -W054 */
+(function (exports) {
+  'use strict';
+
+  // http://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+  function shuffle(array) {
+    var currentIndex = array.length
+      , temporaryValue
+      , randomIndex;
+
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+
+      // And swap it with the current element.
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+    }
+
+    return array;
+  }
+
+  exports.knuthShuffle = shuffle;
+}('undefined' !== 'object' && exports || 'undefined' !== typeof window && window || commonjsGlobal));
+});
+
+var marker = new Marker();
+document.body.appendChild(marker.dom);
+
+
+// generate a code potentially to identify observers
+var code = index.knuthShuffle(
+    Array.from({length: 1024}, function (_,i) { return i; })
+  ).slice(0, 5);
+
+console.log(("code: " + (code.join(', '))));
+
+// show the first one
+marker.update(code[0]);
+
+// cycle through the rest (might be nice if this was on the marker)
+var i = 0;
 setInterval(function () {
-  updateDom(marker, Math.floor(Math.random() * 1024));
-}, 1000);
+  var n = code[++i % code.length];
+  console.log(("display marker " + n));
+  marker.update(n);
+}, 5000);

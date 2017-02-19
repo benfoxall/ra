@@ -21,7 +21,7 @@ const generate = (i) =>
 	]
 
 
-export const createDom = (document) => {
+export const createDom = () => {
   const root = document.createElement('div')
   root.className = 'marker'
 
@@ -51,3 +51,14 @@ export const updateDom = (element, n) => {
 
 
 export default generate
+
+
+export class Marker {
+  constructor () {
+    this.dom = createDom(document)
+  }
+
+  update (n) {
+    updateDom(this.dom, n)
+  }
+}
