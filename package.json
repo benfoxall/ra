@@ -6,6 +6,7 @@
   "author": "Ben Foxall <benfoxall@gmail.com>",
   "license": "MIT",
   "devDependencies": {
+    "js-aruco": "https://github.com/benfoxall/js-aruco.git#784109ecacf6c55ebae59c8231b04c9d55ed04c9",
     "knuth-shuffle": "^1.0.1",
     "mqt": "^1.0.1",
     "rollup": "^0.41.4",
