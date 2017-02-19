@@ -1427,99 +1427,105 @@ Mat3.prototype.row = function(index){
   return new Vec3( m[index][0], m[index][1], m[index][2] );
 };
 
-// _display()
+var _capture = function () {
 
-// do capture
-navigator.mediaDevices.getUserMedia({
-  video: true,
-  audio: false
-})
-.then(function (stream) { return new Promise(function (resolve, reject) {
-    var video = document.createElement('video');
+  // do capture
+  navigator.mediaDevices.getUserMedia({
+    video: true,
+    audio: false
+  })
+  .then(function (stream) { return new Promise(function (resolve, reject) {
+      var video = document.createElement('video');
 
-    video.srcObject = stream;
-    video.play();
+      video.srcObject = stream;
+      video.play();
 
-    video.addEventListener('loadedmetadata',
-      function (e) { return resolve(video); });
-    video.addEventListener('error', reject);
-  }); }
-)
-.then(function (video) {
-  var videoWidth = video.videoWidth;
-  var videoHeight = video.videoHeight;
+      video.addEventListener('loadedmetadata',
+        function (e) { return resolve(video); });
+      video.addEventListener('error', reject);
+    }); }
+  )
+  .then(function (video) {
+    var videoWidth = video.videoWidth;
+    var videoHeight = video.videoHeight;
 
-  var canvas = document.createElement("canvas");
-  canvas.width = videoWidth;
-  canvas.height = videoHeight;
-  document.body.appendChild(canvas);
+    var canvas = document.createElement("canvas");
+    canvas.width = videoWidth;
+    canvas.height = videoHeight;
+    document.body.appendChild(canvas);
 
-  var context = canvas.getContext("2d");
-  var detector = new AR.Detector();
+    var context = canvas.getContext("2d");
+    var detector = new AR.Detector();
 
-  var loop = function () {
+    var loop = function () {
+      requestAnimationFrame(loop);
+
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+      var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+
+      var markers = detector.detect(imageData);
+
+      drawCorners(markers, context);
+      drawId(markers, context);
+    };
+
     requestAnimationFrame(loop);
 
-    context.drawImage(video, 0, 0, canvas.width, canvas.height);
-    var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-
-    var markers = detector.detect(imageData);
-
-    drawCorners(markers, context);
-    drawId(markers, context);
-  };
-
-  requestAnimationFrame(loop);
-
-});
+  });
 
 
 
-// Draw functions from the js-aruco example folder
-function drawCorners(markers, context){
-  var corners, corner, i, j;
+  // Draw functions from the js-aruco example folder
+  function drawCorners(markers, context){
+    var corners, corner, i, j;
 
-  context.lineWidth = 3;
-  for (i = 0; i !== markers.length; ++ i){
-    corners = markers[i].corners;
+    context.lineWidth = 3;
+    for (i = 0; i !== markers.length; ++ i){
+      corners = markers[i].corners;
 
-    context.strokeStyle = "red";
-    context.beginPath();
+      context.strokeStyle = "red";
+      context.beginPath();
 
-    for (j = 0; j !== corners.length; ++ j){
-      corner = corners[j];
-      context.moveTo(corner.x, corner.y);
-      corner = corners[(j + 1) % corners.length];
-      context.lineTo(corner.x, corner.y);
+      for (j = 0; j !== corners.length; ++ j){
+        corner = corners[j];
+        context.moveTo(corner.x, corner.y);
+        corner = corners[(j + 1) % corners.length];
+        context.lineTo(corner.x, corner.y);
+      }
+      context.stroke();
+      context.closePath();
+
+      context.strokeStyle = "green";
+      context.strokeRect(corners[0].x - 2, corners[0].y - 2, 4, 4);
     }
-    context.stroke();
-    context.closePath();
-
-    context.strokeStyle = "green";
-    context.strokeRect(corners[0].x - 2, corners[0].y - 2, 4, 4);
   }
-}
-function drawId(markers, context){
-  var corners, corner, x, y, i, j;
+  function drawId(markers, context){
+    var corners, corner, x, y, i, j;
 
-  context.strokeStyle = "blue";
-  context.lineWidth = 1;
+    context.strokeStyle = "blue";
+    context.lineWidth = 1;
 
-  for (i = 0; i !== markers.length; ++ i){
-    corners = markers[i].corners;
+    for (i = 0; i !== markers.length; ++ i){
+      corners = markers[i].corners;
 
-    x = Infinity;
-    y = Infinity;
+      x = Infinity;
+      y = Infinity;
 
-    for (j = 0; j !== corners.length; ++ j){
-      corner = corners[j];
+      for (j = 0; j !== corners.length; ++ j){
+        corner = corners[j];
 
-      x = Math.min(x, corner.x);
-      y = Math.min(y, corner.y);
+        x = Math.min(x, corner.x);
+        y = Math.min(y, corner.y);
+      }
+      context.strokeText(markers[i].id, x, y);
     }
-    context.strokeText(markers[i].id, x, y);
   }
-}
+
+};
+
+_capture();
+
+
 
 
 
