@@ -1,5 +1,6 @@
 import {Marker} from './markers.js'
 import shuffles from 'knuth-shuffle'
+import mqt from './comms.js'
 
 // import {AR, POS1} from 'js-aruco'
 const display = () => {
