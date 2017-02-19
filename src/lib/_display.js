@@ -24,7 +24,7 @@ const display = () => {
     const n = code[++i % code.length]
     // console.log(`🔛 ${n}`)
     marker.update(n)
-  }, 5000)
+  }, 1500)
 
 }
 

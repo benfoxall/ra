@@ -99,6 +99,9 @@ var index = createCommonjsModule(function (module, exports) {
 }('undefined' !== 'object' && exports || 'undefined' !== typeof window && window || commonjsGlobal));
 });
 
+// import mqt from './comms.js'
+
+// import {AR, POS1} from 'js-aruco'
 var display = function () {
   var marker = new Marker();
   document.body.appendChild(marker.dom);
@@ -120,7 +123,7 @@ var display = function () {
     var n = code[++i % code.length];
     // console.log(`🔛 ${n}`)
     marker.update(n);
-  }, 5000);
+  }, 1500);
 
 };
 
