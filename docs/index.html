@@ -3,6 +3,38 @@
   <head>
     <meta charset="utf-8">
     <title>RA</title>
+    <style media="screen">
+    body {margin:0}
+
+    .marker {
+      background: #fff;
+      margin: 15vmin;
+      width: 70vmin;
+      height: 70vmin;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .marker div {
+      position: absolute;
+      width: 14.4%;
+      height: 14.4%;
+      transition: .4s;
+      background-color: #000;
+      /*opacity: 1;*/
+    }
+
+    /* transition styles */
+    .marker .off {
+      opacity: 0;
+      transform: scale(0.75) rotate(-90deg) rotateX(-90deg);
+      background-color: #08f;
+    }
+    .marker .off:nth-child(2n) {
+      transform: scale(0.75) rotate(90deg) rotateX(90deg);
+      background-color: #f08;
+    }
+    </style>
   </head>
   <body>
     <script src="main.js"></script>
