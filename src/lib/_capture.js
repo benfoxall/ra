@@ -1,13 +1,26 @@
 import {AR} from 'js-aruco'
-import mqt from './comms.js'
+// import mqt from './comms.js'
 
 const _capture = () => {
 
-  // do capture
-  navigator.mediaDevices.getUserMedia({
-    video: true,
-    audio: false
+  var canvas = document.createElement("canvas")
+
+  navigator.mediaDevices.enumerateDevices()
+  .then(devices =>
+    devices.filter(device => device.kind == 'videoinput')
+  )
+  .then(cameras => {
+    console.log("cameras: ", cameras)
+    // Hack: the back one seems to be last
+    return cameras[cameras.length-1]
   })
+  .then( camera =>
+    navigator.mediaDevices
+      .getUserMedia({
+        video: {deviceId: {exact: camera.deviceId} },
+        audio: false
+      })
+  )
   .then(stream =>
     new Promise((resolve, reject) => {
       const video = document.createElement('video')
@@ -23,10 +36,18 @@ const _capture = () => {
   .then(video => {
     const {videoWidth, videoHeight} = video
 
-    var canvas = document.createElement("canvas")
+    const canvas = document.createElement('canvas')
     canvas.width = videoWidth
     canvas.height = videoHeight
     document.body.appendChild(canvas)
+
+    const try_full = () => {
+      canvas.removeEventListener('touchstart', try_full)
+      if(canvas.webkitRequestFullscreen) {
+        canvas.webkitRequestFullscreen()
+      }
+    }
+    canvas.addEventListener('touchstart', try_full)
 
     var context = canvas.getContext("2d")
     const detector = new AR.Detector()
